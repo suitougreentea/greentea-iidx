@@ -1,7 +1,9 @@
 application: greentea-iidx
 version: 0
-runtime: python
+runtime: python27
 api_version: 1
+threadsafe: true
+
 
 handlers:
 - url: /favicon\.ico
@@ -11,6 +13,10 @@ handlers:
 - url: /style\.css
   static_files: style.css
   upload: style\.css
+
+- url: /style_mobile\.css
+  static_files: style_mobile.css
+  upload: style_mobile\.css
 
 - url: /script\.js
   static_files: script.js
