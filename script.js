@@ -44,7 +44,13 @@ function addPanel(musicgroup){
                 '<th class="gt-nowrap">ランプ</th>'+
                 '<th class="gt-nowrap">スコア</th>'+
                 '</tr></thead><tbody class="musiclist"></tbody></table>');
-            $(this).next('.panel-body').children('.musiclist').html("table");
+            var el = $(this).next('.panel-body').find('.musiclist');
+            for (var i=0;i<musicgroup.music.length;i++) {
+                var d = musicgroup.music[i];
+                if(d.type==0) el.append(getParsedData(d.name, musiclist[d.name].version, d.type, musiclist[d.name].spn_level));
+                if(d.type==1) el.append(getParsedData(d.name, musiclist[d.name].version, d.type, musiclist[d.name].sph_level));
+                if(d.type==2) el.append(getParsedData(d.name, musiclist[d.name].version, d.type, musiclist[d.name].spa_level));
+            }
             $(this).next('.panel-body').slideDown();
         }
     });
