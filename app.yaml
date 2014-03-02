@@ -11,16 +11,16 @@ handlers:
   upload: favicon\.ico
 
 - url: /style\.css
-  static_files: style.css
-  upload: style\.css
-
-- url: /style_mobile\.css
-  static_files: style_mobile.css
-  upload: style_mobile\.css
+  static_files: public/style.css
+  upload: public/style\.css
 
 - url: /script\.js
-  static_files: script.js
-  upload: script\.js
+  static_files: public/script.js
+  upload: public/script\.js
+
+#- url: /.*\.(css|js|html)
+#  static_files: /public/\1
+#  upload: /public/.*\.(css|js|html)
 
 - url: .*
   script: main.app

@@ -31,8 +31,8 @@ class MainHandler(webapp2.RequestHandler):
             'test' : 0,
             }
 
-        if is_mobile(self.request.user_agent, False): path = os.path.join(os.path.dirname(__file__), 'main_mobile.html')
-        else: path = os.path.join(os.path.dirname(__file__), 'main.html')
+        if is_mobile(self.request.user_agent, False): path = os.path.join(os.path.dirname(__file__), 'public/main_mobile.html')
+        else: path = os.path.join(os.path.dirname(__file__), 'public/main.html')
         self.response.out.write(template.render(path, template_values))
 
 class GetHTMLHandler(webapp2.RequestHandler):
@@ -52,18 +52,8 @@ class GetJSONHandler(webapp2.RequestHandler):
             musiclist[fumen.name] = {
                 'version' : fumen.version,
                 # 'name' : fumen.name,
-                'spn_level' : fumen.spn_level,
-                'sph_level' : fumen.sph_level,
-                'spa_level' : fumen.spa_level,
-                'dpn_level' : fumen.dpn_level,
-                'dph_level' : fumen.dph_level,
-                'dpa_level' : fumen.dpa_level,
-                'spn_notes' : fumen.spn_notes,
-                'sph_notes' : fumen.sph_notes,
-                'spa_notes' : fumen.spa_notes,
-                'dpn_notes' : fumen.dpn_notes,
-                'dph_notes' : fumen.dph_notes,
-                'dpa_notes' : fumen.dpa_notes,
+                'level' : [fumen.spn_level, fumen.sph_level, fumen.spa_level, fumen.dpn_level, fumen.dph_level, fumen.dpa_level],
+                'notes' : [fumen.spn_notes, fumen.sph_notes, fumen.spa_notes, fumen.dpn_notes, fumen.dph_notes, fumen.dpa_notes],
             }
         self.response.out.write(json.dumps(musiclist, separators=(',',':') ,ensure_ascii=False))
 

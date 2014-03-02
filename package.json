@@ -1,0 +1,33 @@
+{
+  "name": "greentea_iidx",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "dependencies": {
+    "grunt-contrib-stylus": "~0.13.1",
+    "jade": "~1.2.0",
+    "stylus": "~0.42.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-cli": "~0.1.13",
+    "grunt": "~0.4.2",
+    "grunt-contrib-jade": "~0.10.0",
+    "grunt-contrib-coffee": "~0.10.1"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7.1"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/grunt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/suitougreentea/greentea-iidx.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suitougreentea/greentea-iidx/issues"
+  },
+  "homepage": "https://github.com/suitougreentea/greentea-iidx"
+}
