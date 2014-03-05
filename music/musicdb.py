@@ -4,11 +4,11 @@ import json
 
 class MusicDatabase:
     version_data = {
-    '1st style':1, 'substream':2, '2nd style':3, '3rd style':4, '4th style':5,
-    '5th style':6, '6th style':7, '7th style':8, '8th style':9, '9th style':10,
-    '10th style':11, 'IIDX RED':12, 'HAPPYSKY':13, 'DistorteD':14, 'GOLD':15,
-    'DJ TROOPERS':16, 'EMPRESS':17, 'SIRIUS':18, 'Resort Anthem':19, 'Lincle':20,
-    'tricoro':21, 'SPADA':22,
+    '1st style':0, 'substream':1, '2nd style':2, '3rd style':3, '4th style':4,
+    '5th style':5, '6th style':6, '7th style':7, '8th style':8, '9th style':9,
+    '10th style':10, 'IIDX RED':11, 'HAPPYSKY':12, 'DistorteD':13, 'GOLD':14,
+    'DJ TROOPERS':15, 'EMPRESS':16, 'SIRIUS':17, 'Resort Anthem':18, 'Lincle':19,
+    'tricoro':20, 'SPADA':21,
     }
 
     def refresh_data(self, music_json_str):
@@ -33,8 +33,8 @@ class MusicDatabase:
 
             self.checkAndUpdateMusic(version, name, dspn, dsph, dspa, ddpn, ddph, ddpa, nspn, nsph, nspa, ndpn, ndph, ndpa)
 
-    def deleteAllFumenData(self):
-        for fumen in database.FumenData.all():
+    def deleteAllMusicData(self):
+        for fumen in database.MusicData.all():
             # self.deleteFumenScoreData(fumen)
             fumen.delete()
 
@@ -101,3 +101,26 @@ class MusicDatabase:
 
     def registerNewFumen(self, version, name, difficultytype, difficulty, notes):
         database.FumenData(version=version, name=name, difficultytype=difficultytype, difficulty=difficulty, notes=notes).put()
+
+    def refresh_score(self, id, json_str):
+        data = json.loads(json_str)
+        for fumen in data:
+            self.register_score(id, fumen["name"], fumen["type"], 0, fumen["score"], 0)
+
+    def register_score(self, id, name, type, lamp, score, bp):
+        queryscore = database.ScoreData.gql("WHERE id=:id and name=:name", id=id, name=name)
+        if queryscore.count(1) == 0:
+            database.ScoreData(
+                id = id,
+                name = name,
+                type = type,
+                lamp = lamp,
+                score = score,
+                bp = bp
+                ).put()
+        else:
+            fumen = queryscore.get()
+            fumen.lamp = lamp
+            fumen.score = score
+            fumen.bp = bp
+            fumen.put()

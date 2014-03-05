@@ -26,7 +26,7 @@ class MusicData(db.Model):
 class ScoreData(db.Model):
     id = db.IntegerProperty()
     name = db.StringProperty()
-    difficultytype = db.IntegerProperty()
+    type = db.IntegerProperty()
     lamp = db.IntegerProperty()
     score = db.IntegerProperty()
     bp = db.IntegerProperty()

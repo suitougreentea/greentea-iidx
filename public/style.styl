@@ -1,3 +1,8 @@
+folder-color(c1, c2, cd, cb)
+  background linear-gradient(to bottom, c1 0%, c2 100%)
+  background-color cd
+  border-color cb
+
 body
   padding-top 75px
 
@@ -14,6 +19,8 @@ body
     .btn
       width 120px
       padding 0px 6px
+    .form-group
+      margin-bottom 0px
   &nowrap
     white-space nowrap
   &scoreinput
@@ -30,3 +37,6 @@ body
       background-color #B90
     &-another
       background-color #C00
+  #musiclist-container > &folderpanel
+    &-version
+      folder-color #DFF #BDF #CEF #ACF

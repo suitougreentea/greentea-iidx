@@ -62,16 +62,24 @@ class AddDataHandler(webapp2.RequestHandler):
         data = musicdb.MusicDatabase()
         self.response.out.write(data.refresh_data(self.request.get('music_json')))
 
+class RegisterHandler(webapp2.RequestHandler):
+    def post(self):
+        data = musicdb.MusicDatabase()
+        data.refresh_score(1,self.request.get('changes_json'))
+        self.response.out.write(self.request.get('changes_json'))
+
+
 class DebugHandler(webapp2.RequestHandler):
     def get(self):
         if self.request.get('m')=='delete':
             data = musicdb.MusicDatabase()
-            data.deleteAllFumenData()
+            data.deleteAllMusicData()
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/get-html', GetHTMLHandler),
     ('/get-json', GetJSONHandler),
     ('/add', AddDataHandler),
+    ('/register', RegisterHandler),
     ('/debug', DebugHandler)
     ], debug=True)
