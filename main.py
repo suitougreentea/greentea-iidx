@@ -41,21 +41,33 @@ class GetHTMLHandler(webapp2.RequestHandler):
 
 class GetJSONHandler(webapp2.RequestHandler):
     def get(self):
-        #queryfumen = database.MusicData.gql("WHERE difficulty>=11")
-        queryfumen = database.MusicData.all()
-        #self.response.out.write('[')
-        #listfumen = queryfumen.fetch(500)
+        if self.request.get("user") == "":
+            queryfumen = database.MusicData.all()
 
-        musiclist = {}
+            musiclist = {}
 
-        for fumen in queryfumen:
-            musiclist[fumen.name] = {
-                'version' : fumen.version,
-                # 'name' : fumen.name,
-                'level' : [fumen.spn_level, fumen.sph_level, fumen.spa_level, fumen.dpn_level, fumen.dph_level, fumen.dpa_level],
-                'notes' : [fumen.spn_notes, fumen.sph_notes, fumen.spa_notes, fumen.dpn_notes, fumen.dph_notes, fumen.dpa_notes],
-            }
-        self.response.out.write(json.dumps(musiclist, separators=(',',':') ,ensure_ascii=False))
+            for fumen in queryfumen:
+                musiclist[fumen.name] = {
+                    'version' : fumen.version,
+                    # 'name' : fumen.name,
+                    'level' : [fumen.spn_level, fumen.sph_level, fumen.spa_level, fumen.dpn_level, fumen.dph_level, fumen.dpa_level],
+                    'notes' : [fumen.spn_notes, fumen.sph_notes, fumen.spa_notes, fumen.dpn_notes, fumen.dph_notes, fumen.dpa_notes],
+                }
+            self.response.out.write(json.dumps(musiclist, separators=(',',':') ,ensure_ascii=False))
+        if self.request.get("user") == "test":
+            queryscore = database.ScoreData.gql("WHERE id=:id", id=1)
+
+            scorelist = {}
+
+            for score in queryscore:
+                scorelist[score.name+"-"+str(score.type)] = {
+                    "name": score.name,
+                    "type": score.type,
+                    "lamp": score.lamp,
+                    "score": score.score,
+                    "bp": score.bp
+                }
+            self.response.out.write(json.dumps(scorelist, separators=(',',':') ,ensure_ascii=False))
 
 class AddDataHandler(webapp2.RequestHandler):
     def post(self):

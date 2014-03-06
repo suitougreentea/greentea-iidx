@@ -105,10 +105,10 @@ class MusicDatabase:
     def refresh_score(self, id, json_str):
         data = json.loads(json_str)
         for fumen in data:
-            self.register_score(id, fumen["name"], fumen["type"], 0, fumen["score"], 0)
+            self.register_score(id, fumen["name"], fumen["type"], fumen["lamp"], fumen["score"], fumen["bp"])
 
     def register_score(self, id, name, type, lamp, score, bp):
-        queryscore = database.ScoreData.gql("WHERE id=:id and name=:name", id=id, name=name)
+        queryscore = database.ScoreData.gql("WHERE id=:id and name=:name and type=:type", id=id, name=name, type=type)
         if queryscore.count(1) == 0:
             database.ScoreData(
                 id = id,
@@ -120,7 +120,10 @@ class MusicDatabase:
                 ).put()
         else:
             fumen = queryscore.get()
-            fumen.lamp = lamp
-            fumen.score = score
-            fumen.bp = bp
-            fumen.put()
+            if lamp==0 and score is None and bp is None:
+                fumen.delete()
+            else:
+                fumen.lamp = lamp
+                fumen.score = score
+                fumen.bp = bp
+                fumen.put()

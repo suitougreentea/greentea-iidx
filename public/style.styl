@@ -17,7 +17,6 @@ body
       height 20px
       padding 0px 6px
     .btn
-      width 120px
       padding 0px 6px
     .form-group
       margin-bottom 0px
@@ -37,6 +36,87 @@ body
       background-color #B90
     &-another
       background-color #C00
+  &menu
+    &-fullcombo
+      -webkit-animation animation-menu-fullcombo 0.2s ease 0s infinite normal //TODO: prefix
+    &-exhard
+      -webkit-animation animation-menu-exhard 0.2s ease 0s infinite normal
+    &-hard
+      background-color #FFF
+    &-clear
+      background-color #CCF
+    &-easy
+      background-color #CFC
+    &-assist
+      background-color #FCF
+    &-failed
+      background-color #FCC
+    &-noplay
+      background-color #DDD
+  &btn-clearlamp
+    height 20px
+    width 32px
+    background-image none
+    &-fullcombo, &-fullcombo:active, &-fullcombo:hover, &-fullcombo:focus
+      -webkit-animation animation-lamp-fullcombo 0.2s ease 0s infinite normal //TODO: prefix
+    &-exhard, &-exhard:active, &-exhard:hover, &-exhard:focus
+      -webkit-animation animation-lamp-exhard 0.2s ease 0s infinite normal
+    &-hard, &-hard:active, &-hard:hover, &-hard:focus
+      background-color #FFF
+    &-clear, &-clear:active, &-clear:hover, &-clear:focus
+      background-color #88F
+    &-easy, &-easy:active, &-easy:hover, &-easy:focus
+      background-color #8F8
+    &-assist, &-assist:active, &-assist:hover, &-assist:focus
+      background-color #F8F
+    &-failed, &-failed:active, &-failed:hover, &-failed:focus
+      background-color #F88
+    &-noplay, &-noplay:active, &-noplay:hover, &-noplay:focus
+      background-color #AAA
   #musiclist-container > &folderpanel
     &-version
       folder-color #DFF #BDF #CEF #ACF
+
+@-webkit-keyframes animation-menu-fullcombo
+  0%
+    background-color: #FFF
+  25%
+    background-color: #FDD
+  50%
+    background-color: #FFD
+  75%
+    background-color: #DDF
+  100%
+    background-color: #FFF
+
+@-webkit-keyframes animation-lamp-fullcombo
+  0%
+    background-color: #FFF
+  25%
+    background-color: #FCC
+  50%
+    background-color: #FFC
+  75%
+    background-color: #CCF
+  100%
+    background-color: #FFF
+
+@-webkit-keyframes animation-menu-exhard
+  0%
+    background-color: #FDD
+  33%
+    background-color: #FFD
+  67%
+    background-color: #DDF
+  100%
+    background-color: #FDD
+
+@-webkit-keyframes animation-lamp-exhard
+  0%
+    background-color: #FCC
+  33%
+    background-color: #FFC
+  67%
+    background-color: #CCF
+  100%
+    background-color: #FCC
