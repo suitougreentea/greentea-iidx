@@ -3,6 +3,10 @@ folder-color(c1, c2, cd, cb)
   background-color cd
   border-color cb
 
+bg-vertical-linear-gradient(c1, c2, cd)
+  background linear-gradient(to bottom, c1 0%, c2 100%)
+  background-color cd
+
 body
   padding-top 75px
 
@@ -38,9 +42,13 @@ body
       background-color #C00
   &menu
     &-fullcombo
-      -webkit-animation animation-menu-fullcombo 0.2s ease 0s infinite normal //TODO: prefix
+      //-webkit-animation animation-menu-fullcombo 0.5s ease 0s infinite normal //TODO: prefix
+      background-color #CCF
+      background-image none
     &-exhard
-      -webkit-animation animation-menu-exhard 0.2s ease 0s infinite normal
+      //-webkit-animation animation-menu-exhard 0.5s ease 0s infinite normal
+      background-color #FF7
+      background-image none
     &-hard
       background-color #FFF
     &-clear
@@ -58,9 +66,13 @@ body
     width 32px
     background-image none
     &-fullcombo, &-fullcombo:active, &-fullcombo:hover, &-fullcombo:focus
-      -webkit-animation animation-lamp-fullcombo 0.2s ease 0s infinite normal //TODO: prefix
+      //-webkit-animation animation-lamp-fullcombo 0.5s ease 0s infinite normal //TODO: prefix
+      //background-image url(anim.gif)
+      background-color #DDF
     &-exhard, &-exhard:active, &-exhard:hover, &-exhard:focus
-      -webkit-animation animation-lamp-exhard 0.2s ease 0s infinite normal
+      //-webkit-animation animation-lamp-exhard 0.5s ease 0s infinite normal
+      //background-image url(anim.gif)
+      background-color #FF8
     &-hard, &-hard:active, &-hard:hover, &-hard:focus
       background-color #FFF
     &-clear, &-clear:active, &-clear:hover, &-clear:focus
@@ -73,6 +85,28 @@ body
       background-color #F88
     &-noplay, &-noplay:active, &-noplay:hover, &-noplay:focus
       background-color #AAA
+  &progress-bar
+    &-fullcombo
+      //-webkit-animation animation-progress-fullcombo 0.5s ease 0s infinite normal
+      //background-image url(anim.gif)
+      bg-vertical-linear-gradient #CCF #DDF #DDF
+    &-exhard
+      //-webkit-animation animation-progress-exhard 0.5s ease 0s infinite normal
+      //background-image url(anim.gif)
+      bg-vertical-linear-gradient #EE3 #DD2 #EE3
+    &-hard
+      bg-vertical-linear-gradient #EEE #DDD #EEE
+    &-clear
+      bg-vertical-linear-gradient #38F #27E #38F
+    &-easy
+      bg-vertical-linear-gradient #2F4 #1E3 #2F4
+    &-assist
+      bg-vertical-linear-gradient #F3F #E2E #F3F
+    &-failed
+      bg-vertical-linear-gradient #D22 #C11 #D22
+    &-noplay
+      background-color transparent
+      background-image none
   #musiclist-container > &folderpanel
     &-version
       folder-color #DFF #BDF #CEF #ACF
@@ -101,6 +135,18 @@ body
   100%
     background-color: #FFF
 
+@-webkit-keyframes animation-progress-fullcombo
+  0%
+    background-color: #FFF
+  25%
+    background-color: #FCC
+  50%
+    background-color: #FFC
+  75%
+    background-color: #CCF
+  100%
+    background-color: #FFF
+
 @-webkit-keyframes animation-menu-exhard
   0%
     background-color: #FDD
@@ -112,6 +158,16 @@ body
     background-color: #FDD
 
 @-webkit-keyframes animation-lamp-exhard
+  0%
+    background-color: #FCC
+  33%
+    background-color: #FFC
+  67%
+    background-color: #CCF
+  100%
+    background-color: #FCC
+
+@-webkit-keyframes animation-progress-exhard
   0%
     background-color: #FCC
   33%

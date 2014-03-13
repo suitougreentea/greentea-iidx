@@ -18,9 +18,15 @@ handlers:
   static_files: public/script.js
   upload: public/script\.js
 
+- url: /anim\.gif
+  static_files: public/anim.gif
+  upload: public/anim\.gif
+
 #- url: /.*\.(css|js|html)
 #  static_files: /public/\1
 #  upload: /public/.*\.(css|js|html)
+- url: /_ah/login_required
+  script: do_openid_login.app
 
 - url: .*
   script: main.app

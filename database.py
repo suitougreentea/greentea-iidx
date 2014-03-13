@@ -30,3 +30,11 @@ class ScoreData(db.Model):
     lamp = db.IntegerProperty()
     score = db.IntegerProperty()
     bp = db.IntegerProperty()
+
+class UserData(db.Model):
+    userid = db.StringProperty()
+    name = db.StringProperty()
+    iidxid = db.IntegerProperty()
+    grade_sp = db.IntegerProperty()
+    grade_dp = db.IntegerProperty()
+    comment = db.StringProperty()

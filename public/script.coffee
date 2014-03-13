@@ -10,6 +10,33 @@ lamp_class = ["noplay", "failed", "assist", "easy", "clear", "hard", "exhard", "
 dp = false # if sp, false/if dp, true (debug)
 changes = []
 
+quickSort = (array, order, func, begin, end) ->
+  i = begin
+  j = end
+  pivot = array[order[Math.floor((begin+end)/2)]]
+
+  loop
+    i++ while func(array[order[i]], pivot) < 0
+    j-- while func(array[order[j]], pivot) > 0
+    if i>=j then break
+
+    temp = order[i]
+    order[i] = order[j]
+    order[j] = temp
+
+    i++; j--
+
+  if begin<i-1 then quickSort(array, order, func, begin, i-1)
+  if end>j+1 then quickSort(array, order, func, j+1, end)
+
+  return order
+
+# func(a,b): if a>b +, a=b 0, a<b -
+sort = (array, func) ->
+  #return [0..array.length-1]
+  #quicksort
+  return quickSort(array, [0..array.length-1], func, 0, array.length-1)
+
 checkUpdate = (fumen) ->
   if changes.indexOf(fumen) == -1
     changes.push fumen
@@ -33,10 +60,22 @@ refreshEntry = (groupid, i) ->
   #  return (css.match (/\bgt-btn-clearlamp-\S+/g) || []).join(' ');
   #$("#td-#{d.id}-#{d.num} .gt-btn-clearlamp").addClass "gt-btn-clearlamp-#{lamp_class[d.lamp]}"
 
-refreshEntries = (fumen, calledgroupid) -> #very wip
+refreshEntries = (fumen, calledgroupid) ->
   for d, i in fumen.parentgroups
     if d.id == calledgroupid then continue
     refreshEntry(d.id, d.num)
+
+refreshFolderInfo = (groupid) ->
+  lampcount = []
+  for d, i in groups[groupid].fumen
+    if lampcount[d.lamp] then lampcount[d.lamp]++ else lampcount[d.lamp]=1
+  for i in [7..0]
+    percentage = lampcount[i]/groups[groupid].fumen.length*100
+    $("#panelbody-#{groupid} .gt-progress-lamp").append("""<div class="progress-bar gt-progress-bar-#{lamp_class[i]}" style="width: #{percentage}%"></div>""")
+
+refreshVisibility = (groupid) ->
+  for d, i in groups[groupid].fumen
+    if groups[groupid].visibility[d.type] then $("#td-#{groupid}-#{i}").show() else $("#td-#{groupid}-#{i}").hide()
 
 setLamp = (fumen, lamp, calledgroupid, i) ->
   fumen.lamp = lamp
@@ -44,7 +83,7 @@ setLamp = (fumen, lamp, calledgroupid, i) ->
   refreshEntries(fumen, calledgroupid)
   checkUpdate(fumen)
 
-addMusicEntry = (groupid, i) -> #TODO: not td-version0-0, but tr-version0-0
+addMusicEntryEdit = (groupid, i) -> #TODO: not td-version0-0, but tr-version0-0
   fumen = groups[groupid].fumen[i]
   el = $("#folder-#{groupid}").next(".panel-body").find(".musiclist").append """<tr id="td-#{groupid}-#{i}">
     <td>#{versions_num[fumen.version]}</td>
@@ -108,6 +147,24 @@ addMusicEntry = (groupid, i) -> #TODO: not td-version0-0, but tr-version0-0
         $("#td-#{groupid}-#{i} .gt-menu-#{lamp_class[j]} a").click -> setLamp(fumen, j, groupid, i); $("#td-#{groupid}-#{i} .dropdown-menu").dropdown("toggle"); return false;
         return
 
+addMusicEntryView = (groupid, i) ->
+  fumen = groups[groupid].fumen[i]
+  el = $("#folder-#{groupid}").next(".panel-body").find(".musiclist").append """<tr id="td-#{groupid}-#{i}">
+    <td>#{versions_num[fumen.version]}</td>
+    <td>#{fumen.name}</td>
+    <td class="gt-nowrap">
+      <span class="label gt-difficultylabel gt-difficultylabel-#{dtype_name[fumen.type].toLowerCase()} hidden-xs">#{dtype_name[fumen.type]} #{fumen.level}</span>
+      <span class="label gt-difficultylabel gt-difficultylabel-small gt-difficultylabel-#{dtype_name[fumen.type].toLowerCase()} visible-xs">#{fumen.level}</span>
+    </td>
+    <td class="gt-nowrap">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle gt-btn-clearlamp gt-btn-clearlamp-fullcombo" data-toggle="dropdown"></button>
+        <ul class="dropdown-menu" role="menu"></ul>
+      </div>
+    </td>
+    <td class="gt-nowrap"><div class="form-group"><input type="text" class="form-control gt-scoreinput" name="score" placeholder="#{fumen.notes*2}"></div></td>
+    <td class="gt-nowrap"><div class="form-group"><input type="text" class="form-control gt-scoreinput" name="bp" placeholder="BP"></div></td>
+    </tr>"""
 
 addPanel = (musicgroup) ->
   $('#musiclist-container').append("""<div id="folder-#{musicgroup.id}" class="panel-heading gt-folderpanel-#{musicgroup.class}">#{musicgroup.name}</div>""");
@@ -118,11 +175,11 @@ addPanel = (musicgroup) ->
       $(this).after("""<div id="panelbody-#{musicgroup.id}" class="panel-body" style="display:none"></div>""")
       $(this).next(".panel-body").html(
         """<div id="foldersetting-#{musicgroup.id}" class="gt-foldersetting">
-        <div class="progress"></div>
-        <div class="btn-group">
-        <button type="button" class="btn btn-default">Left</button>
-        <button type="button" class="btn btn-default">Middle</button>
-        <button type="button" class="btn btn-default">Right</button>
+        <div class="progress gt-progress-lamp"></div>
+        <div class="btn-group" data-toggle="buttons">
+        <button type="button" class="btn btn-default active"><input type="checkbox" name="visibility-normal">NORMAL</button>
+        <button type="button" class="btn btn-default active"><input type="checkbox" name="visibility-hyper">HYPER</button>
+        <button type="button" class="btn btn-default active"><input type="checkbox" name="visibility-another">ANOTHER</button>
         </div>
         </div>
         <hr>
@@ -135,8 +192,22 @@ addPanel = (musicgroup) ->
         <th class="gt-nowrap">BP</th>
         </tr></thead><tbody class="musiclist"></tbody></table>
         """)
-      for d, i in musicgroup.fumen
-        addMusicEntry(musicgroup.id, i)
+      sortedlist = sort(
+        musicgroup.fumen,
+        (a, b) ->
+          if a.name == b.name then return a.type - b.type
+          if a.name > b.name then return 1
+          if a.name < b.name then return -1
+      )
+      for d, i in sortedlist
+        if mode=="edit" then addMusicEntryEdit(musicgroup.id, d, i)
+        else if mode=="view" then addMusicEntryView(musicgroup.id, d, i)
+
+      for i in [(if dp then 3 else 0)..(if dp then 5 else 2)]
+        do (i) ->
+          $("#panelbody-#{musicgroup.id} input[name='visibility-#{dtype_name[i].toLowerCase()}']").change -> musicgroup.visibility[i]=$(this).is(':checked'); refreshVisibility(musicgroup.id)
+      refreshFolderInfo musicgroup.id
+
       $(this).next('.panel-body').slideDown()
 
 addFumenToGroup = (groupid, fumen) ->
@@ -147,7 +218,7 @@ $ ->
   # fumen, group
   $.ajax '/get-json',
     type: 'GET'
-    timeout: 10000
+    timeout: 100000
     dataType: 'JSON'
     success: (musicjson, status_1, xhr_1) ->
       #score
@@ -155,7 +226,7 @@ $ ->
         type: "GET"
         timeout: 10000
         data: {
-          user: "test"
+          user: if mode=="edit" then currentUser else targetUser
         }
         dataType: "JSON"
         success: (scorejson, status_2, xhr_2) ->
@@ -168,13 +239,16 @@ $ ->
               id: "level#{i}"
               class: "level"
               name: "Level #{i}"
+              visibility: [true, true, true, true, true, true]
               fumen: []
             }
+
           for d, i in versions
             groups["version#{i}"] = {
               id: "version#{i}"
               class: "version"
               name: d
+              visibility: [true, true, true, true, true, true]
               fumen: []
             }
 
@@ -230,3 +304,11 @@ $ ->
         alert(status)
       complete: (xhr, status) ->
         console.log('ajax finished')
+
+  $('#sidebar-panel').affix({
+    offset: {
+      top: 0
+      bottom: ->
+        return (this.bottom = $('footer').outerHeight(true))
+    }
+  })
